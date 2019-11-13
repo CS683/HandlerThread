@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Handler mainHandler, threadHandler;
     private HandlerThread mHandlerThread;
+    private LongOperation longOperation = new LongOperation ();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
                 long delay = m.getData ().getLong("delay");
 
-                long i = longOperation (delay);
+                long i = longOperation.run (delay);
 
                 Message msg = Message.obtain ();
                 Bundle bundle = new Bundle();
@@ -76,12 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mainHandler.sendMessage(msg);
 
-
-
-
-
-
-                return true;
+        return true;
             }
         } );
         // passing with two parameters: a looper and a callback object.
@@ -123,14 +119,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    public long longOperation(long threadDelay) {
-        Log.d(TAG, " delay "+ threadDelay);
-        long i;
-        for (i = 0; i < threadDelay * 100000000; i++);
-        Log.d(TAG, " delay "+ threadDelay);
-        return i;
+    public void stopOperation(View v){
+        longOperation.setStop (true);
+        // user interrupt() to interrupt the thread
+        // mHandlerThread.interrupt ();
     }
+
+
 
 
 
